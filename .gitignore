@@ -1,5 +1,4 @@
-"Coffee Machine/*"
-"Coffee Machine\*"
+Coffee Machine/
 *idea
 *.yaml
-
+*.txt
