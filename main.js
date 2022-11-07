@@ -53,7 +53,7 @@ while (status){
     switch (action){
         case actions[0]: //buy
             let opt = input(`What do you want to buy? ${optionsString(options)}back - to main menu:\n`)
-            if (opt === 'back')
+            if (opt === 'back' || opt.length > 1)
                 break;
             opt = (--opt) % options.length;
             if (machine.cups <= 0){
@@ -82,10 +82,10 @@ while (status){
             }
             break;
         case actions[1]: //fill
-            machine.water += +input('Write how many ml of water the coffee machine you want to add:\n');
-            machine.milk += +input('Write how many ml of milk the coffee machine you want to add:\n');
-            machine.beans += +input('Write how many grams of coffee beans machine you want to add:\n');
-            machine.cups += +input('Write how many disposable cups you want to add:\n');
+            machine.water += +input(questionBuilder('ml of water'));
+            machine.milk += +input(questionBuilder('ml of milk'));
+            machine.beans += +input(questionBuilder('grams of coffee beans'));
+            machine.cups += +input(questionBuilder('disposable cups'));
             break;
         case actions[2]: //take
             console.log(`I gave you $${machine.money}`);
@@ -102,4 +102,8 @@ while (status){
             break;
     }
     console.log();
+}
+
+function questionBuilder(value){
+    return `Write how many ${value} you want to add:\n`;
 }
