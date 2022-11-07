@@ -1,29 +1,83 @@
 const input = require('sync-input')
 
-// console.log(`Starting to make a coffee
-// Grinding coffee beans
-// Boiling water
-// Mixing boiled water with crushed coffee beans
-// Pouring coffee into the cup
-// Pouring some milk into the cup
-// Coffee is ready!`)
-let water = input('Write how many ml of water the coffee machine has:');
-let milk = input('Write how many ml of milk the coffee machine has:');
-let beans = input('Write how many grams of coffee beans machine has:');
-let userCups = input('Write how many cups of coffee you will need:');
-// console.log(`For ${userCups == 1 ? `${userCups} cup` : `${userCups} cups`} of coffee you will need:
-// ${userCups*200} ml of water
-// ${userCups*50} ml of milk
-// ${userCups*15} g of coffee beans`);
-let cups = Math.min(Math.floor(water/200), Math.floor(milk/50), Math.floor(beans/15));
-switch (Math.sign(cups - userCups)){
-    case (-1):
-        console.log(`No, I can make only ${cups} cups of coffee.`);
+let machine = {
+    water: 400,
+    milk: 540,
+    beans: 120,
+    cups: 9,
+    money: 550
+};
+let espresso = {
+    tag: 'espresso',
+    water: 250,
+    milk: 0,
+    beans: 16,
+    price: 4
+}
+let latte = {
+    tag: 'latte',
+    water: 350,
+    milk: 75,
+    beans: 20,
+    price: 7
+}
+let cappuccino = {
+    tag: 'cappuccino',
+    water: 200,
+    milk: 100,
+    beans: 12,
+    price: 6
+}
+const actions = ['buy', 'fill', 'take'];
+const options = [espresso, latte, cappuccino];
+function optionsString(options){
+    let data = '';
+    let num = 1;
+    for (let i in options){
+        data +=`${num++} - ${options[i].tag}`;
+        //separator
+        if (i !== options.length - 1)
+            data += ', ';
+        else
+            data += ':\n';
+    }
+    return data;
+}
+function display(machine){
+    console.log(`The coffee machine has:
+${machine.water} ml of water
+${machine.milk} ml of milk
+${machine.beans} g of coffee beans
+${machine.cups} disposable cups
+$${machine.money} of money
+`);
+}
+
+display(machine);
+let action = input(`Write action (${actions.toString()}):`);
+switch (action){
+    case actions[0]: //buy
+        let opt = input(`What do you want to buy? ${optionsString(options)}`)
+        opt = (--opt) % options.length;
+        machine.water -= options[opt].water;
+        machine.milk -= options[opt].milk;
+        machine.beans -= options[opt].beans;
+        machine.cups -= 1;
+        machine.money += options[opt].price;
         break;
-    case (0):
-        console.log('Yes, I can make that amount of coffee');
+    case actions[1]: //fill
+        machine.water += Number(input('Write how many ml of water the coffee machine you want to add:'));
+        machine.milk += Number(input('Write how many ml of milk the coffee machine you want to add:'));
+        machine.beans += Number(input('Write how many grams of coffee beans machine you want to add:'));
+        machine.cups += Number(input('Write how many disposable cups you want to add:'));
+        break;
+    case actions[2]: //take
+        console.log(`I gave you $${machine.money}`);
+        machine.money = 0;
         break;
     default:
-        console.log(`Yes, I can make that amount of coffee (and even ${cups - userCups} more than that)`);
+        console.log(`No such action`);
         break;
 }
+console.log();
+display(machine);
